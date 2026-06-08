@@ -1316,10 +1316,31 @@ async function analyzePhoto() {
   btn.disabled = true;
   btnContent.innerHTML = '<div class="spinner"></div> Analyse en cours...';
   const context = document.getElementById('photo-context').value.trim();
-  const prompt = `Tu es un expert en nutrition. Analyse cette photo de repas.
-${context ? `Contexte : "${context}"` : ''}
+  const prompt = `Tu es un nutritionniste expert européen. Analyse cette photo de repas avec une précision maximale.
+
+${context ? `Informations supplémentaires fournies : "${context}"` : ''}
+
+Méthode d'analyse :
+1. Identifie chaque aliment visible séparément
+2. Estime le poids de chaque aliment en grammes (portions européennes standard)
+3. Calcule les macros de chaque aliment séparément
+4. Additionne pour obtenir les totaux
+
+Contexte : portions belges/européennes (plus petites que les portions américaines).
+
 Réponds UNIQUEMENT en JSON valide sans markdown :
-{"name":"Nom du plat (max 40 chars)","calories":450,"proteines":25,"glucides":40,"lipides":18,"fibres":5,"description":"Aliments identifiés et précision de l'estimation (1 phrase)"}`;
+{
+  "name": "Nom court du plat (max 40 chars)",
+  "calories": 450,
+  "proteines": 25,
+  "glucides": 40,
+  "lipides": 18,
+  "fibres": 5,
+  "details": [
+    {"aliment": "Nom", "poids_g": 150, "calories": 200}
+  ],
+  "description": "Liste des aliments détectés avec poids estimés et niveau de confiance (élevé/moyen/faible)"
+}`;
   try {
     const res = await fetch('https://nutritrack-proxy.delincesam2.workers.dev', {
       method: 'POST',
