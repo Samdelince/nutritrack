@@ -1286,9 +1286,11 @@ async function createFamily() {
   const btn = document.getElementById('fst-create-btn');
   btn.disabled = true; btn.textContent = 'Création...';
 
+  const inviteCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+
   const { data: family, error: fErr } = await sb
     .from('families')
-    .insert({ name: familyName, created_by: currentUser.id })
+    .insert({ name: familyName, created_by: currentUser.id, invite_code: inviteCode })
     .select().single();
 
   if (fErr) { showFamilySetupError(fErr.message); btn.disabled = false; btn.textContent = 'Créer ma famille'; return; }
