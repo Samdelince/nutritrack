@@ -274,6 +274,229 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 .fmc-row:last-child { border-bottom: none; }
 .invite-code-box { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; letter-spacing: 5px; color: var(--green-dark); background: var(--green-light); padding: 12px 18px; border-radius: 10px; }
 </style>
+<style>
+/* ═══════════════════════════════════════════════════
+   DARK THEME — NutriTrack × J.A.R.V.I.S
+═══════════════════════════════════════════════════ */
+:root {
+  --green: #22c55e;
+  --green-dark: #16a34a;
+  --green-light: rgba(34,197,94,0.12);
+  --orange: #f97316;
+  --orange-dark: #ea580c;
+  --purple: #8b5cf6;
+  --blue: #0ea5e9;
+  --cyan: #00f0ff;
+  --bg: #0a0a0a;
+  --card: #111111;
+  --text: #ffffff;
+  --muted: #a0a0a0;
+  --border: rgba(255,255,255,0.06);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+body { background: var(--bg); color: var(--text); }
+
+/* ── AUTH ── */
+#auth-screen {
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(34,197,94,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 15%, rgba(0,240,255,0.05) 0%, transparent 50%),
+    #0a0a0a;
+}
+.auth-card {
+  background: rgba(15,15,15,0.94);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02);
+}
+.auth-logo h1 { color: var(--text); }
+.auth-logo .logo-x  { color: var(--muted); font-weight: 400; }
+.auth-logo .logo-jarvis {
+  background: linear-gradient(90deg, var(--cyan), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.auth-tabs { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); }
+.auth-tab  { color: var(--muted); }
+.auth-tab.active { background: rgba(255,255,255,0.08); color: var(--text); box-shadow: none; }
+.form-group label  { color: var(--muted); }
+.form-group input  { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); color: var(--text); }
+.form-group input:focus { border-color: var(--green); }
+.btn-primary { box-shadow: 0 4px 24px rgba(34,197,94,0.22); }
+.auth-error { background: rgba(220,38,38,0.1); color: #f87171; border: 1px solid rgba(220,38,38,0.2); }
+
+/* ── TOPBAR ── */
+.topbar {
+  background: rgba(11,11,11,0.92);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-logo { font-size: 17px; display: flex; align-items: center; gap: 5px; }
+.topbar-logo .logo-x { color: var(--muted); font-weight: 400; font-size: 13px; }
+.topbar-logo .logo-jarvis {
+  font-size: 15px; font-weight: 800; letter-spacing: 0.05em;
+  background: linear-gradient(90deg, var(--cyan), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.topbar-user { color: var(--muted); }
+.btn-logout { border-color: rgba(255,255,255,0.1); color: var(--muted); }
+.btn-logout:hover { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.06); }
+
+/* ── NAV TABS ── */
+.nav-tabs { background: #0e0e0e; border-bottom-color: var(--border); overflow-x: auto; }
+.nav-tab  { color: var(--muted); }
+.nav-tab.active { color: var(--green); border-bottom-color: var(--green); }
+.nav-tab:hover:not(.active) { color: rgba(255,255,255,0.55); }
+
+/* ── DATE NAV ── */
+.date-btn { background: var(--card); border-color: var(--border); color: var(--muted); }
+.date-btn:hover { border-color: var(--green); color: var(--green); background: rgba(34,197,94,0.06); }
+.date-display { color: var(--text); }
+
+/* ── SUMMARY MAIN ── */
+.summary-main {
+  background: linear-gradient(135deg, rgba(22,163,74,0.18) 0%, rgba(34,197,94,0.07) 100%);
+  border: 1px solid rgba(34,197,94,0.18);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.summary-main .cal-info .sub { color: rgba(255,255,255,0.55); opacity: 1; }
+.summary-main .goal-row label { color: rgba(255,255,255,0.55); }
+.summary-main .goal-row input { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.18); }
+.progress-ring .track { stroke: rgba(255,255,255,0.08); }
+.progress-ring .fill  { stroke: var(--green); filter: drop-shadow(0 0 7px rgba(34,197,94,0.55)); }
+
+/* ── MACRO CARDS ── */
+.macro-card { background: var(--card); border-color: var(--border); }
+.macro-card:hover { border-color: rgba(255,255,255,0.1); }
+.macro-card .mc-bar { background: rgba(255,255,255,0.05); }
+.mc-p .mc-val { color: var(--green); }
+.mc-p .mc-bar-fill { background: var(--green); box-shadow: 0 0 10px rgba(34,197,94,0.35); }
+.mc-g .mc-val { color: var(--orange); }
+.mc-g .mc-bar-fill { background: var(--orange); }
+.mc-l .mc-val { color: var(--purple); }
+.mc-l .mc-bar-fill { background: var(--purple); box-shadow: 0 0 10px rgba(139,92,246,0.35); }
+.mc-f .mc-val { color: var(--blue); }
+.mc-f .mc-bar-fill { background: var(--blue); }
+
+/* ── WATER / ACTIVITY CARDS ── */
+.extra-card { background: var(--card); border-color: var(--border); }
+.extra-card .ec-add { border-color: rgba(255,255,255,0.1); color: var(--muted); }
+.extra-card .ec-add:hover { border-color: var(--green); color: var(--green); }
+.extra-card .ec-val { color: var(--text); }
+.water-drop { border-color: rgba(14,165,233,0.25); }
+.water-drop.filled { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 7px rgba(14,165,233,0.4); }
+
+/* ── MEALS ── */
+.btn-add-meal { box-shadow: 0 4px 18px rgba(34,197,94,0.22); }
+.meal-cat-header { color: var(--muted); }
+.meal-cat-header::after { background: var(--border); }
+.meal-item { background: var(--card); border-color: var(--border); }
+.meal-item:hover { border-color: rgba(34,197,94,0.28); }
+.badge-cal { background: rgba(34,197,94,0.12); color: #4ade80; }
+.badge-p   { background: rgba(34,197,94,0.07); color: #86efac; }
+.badge-g   { background: rgba(249,115,22,0.1);  color: #fdba74; }
+.badge-l   { background: rgba(139,92,246,0.1);  color: #c4b5fd; }
+.mi-btn:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+.mi-btn.del:hover { color: #f87171; background: rgba(239,68,68,0.08); }
+.empty-cat { border-color: rgba(255,255,255,0.07); color: var(--muted); background: transparent; }
+.section-title { color: var(--text); }
+
+/* ── WEIGHT ── */
+.weight-card { background: var(--card); border-color: var(--border); }
+.btn-save-weight { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+.btn-save-weight:hover { background: rgba(34,197,94,0.18); }
+.weight-input-wrap span { color: var(--muted); }
+
+/* ── MODAL ── */
+.modal-overlay { background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.modal {
+  background: #131313;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-left: 1px solid rgba(255,255,255,0.04);
+  border-right: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 -8px 48px rgba(0,0,0,0.6);
+}
+.modal-handle { background: rgba(255,255,255,0.12); }
+.modal-title  { color: var(--text); }
+.modal-tab { border-color: rgba(255,255,255,0.1); color: var(--muted); background: none; }
+.modal-tab.active { background: var(--green); border-color: var(--green); box-shadow: 0 4px 14px rgba(34,197,94,0.25); }
+.modal .form-group label { color: var(--muted); }
+.modal .form-group input,
+.modal .form-group select,
+.modal .form-group textarea { background: #1e1e1e; border: 1px solid rgba(255,255,255,0.1); color: var(--text); }
+.modal .form-group input:focus,
+.modal .form-group select:focus { border-color: var(--green); }
+.photo-upload-area { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); }
+.photo-upload-area:hover { border-color: var(--green); background: rgba(34,197,94,0.04); }
+.photo-upload-area p { color: var(--muted); }
+.btn-cancel { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: var(--muted); }
+.btn-cancel:hover { background: rgba(255,255,255,0.09); color: var(--text); }
+.btn-save { box-shadow: 0 4px 18px rgba(34,197,94,0.2); }
+.activity-item { background: rgba(255,255,255,0.03); border: 1px solid var(--border); }
+.act-name { color: var(--text); }
+.act-cal  { color: var(--purple); }
+
+/* ── STATS ── */
+.stat-card { background: var(--card); border-color: var(--border); }
+.stat-card h3 { color: var(--muted); }
+
+/* ── TOAST ── */
+.toast { background: #1c1c1c; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 36px rgba(0,0,0,0.55); }
+
+/* ── RECENT MEALS ── */
+.recent-meal-item { background: rgba(255,255,255,0.02); border-color: var(--border); }
+.recent-meal-item:hover { border-color: rgba(34,197,94,0.3); background: rgba(34,197,94,0.03); }
+.rmi-name { color: var(--text); }
+.rmi-info { color: var(--muted); }
+.rmi-cal  { color: var(--green); }
+
+/* ── MEMBER SELECTOR ── */
+.member-sel-btn { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--text); }
+.member-sel-btn:hover { border-color: var(--green); background: rgba(34,197,94,0.06); }
+.member-dropdown { background: #181818; border-color: rgba(255,255,255,0.1); box-shadow: 0 16px 52px rgba(0,0,0,0.65); }
+.member-drop-item { color: var(--text); }
+.member-drop-item:hover { background: rgba(255,255,255,0.05); }
+.member-drop-item.selected { background: rgba(34,197,94,0.08); }
+
+/* ── FAMILY SETUP MODAL ── */
+#family-setup-modal .modal { background: #131313; border: 1px solid rgba(255,255,255,0.08); }
+
+/* ── FAMILY TAB ── */
+.fmc-avatar { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.16); }
+.fmc-row { border-bottom-color: var(--border); }
+.invite-code-box {
+  color: var(--cyan) !important;
+  background: rgba(0,240,255,0.05) !important;
+  border: 1px solid rgba(0,240,255,0.15) !important;
+  text-shadow: 0 0 18px rgba(0,240,255,0.4);
+  -webkit-text-fill-color: var(--cyan) !important;
+}
+
+/* ── INPUTS sans background explicite ── */
+input[type="number"], input[type="text"], input[type="email"], input[type="password"] {
+  background: #1a1a1a; color: var(--text); border-color: rgba(255,255,255,0.1);
+}
+input:focus { outline: none; border-color: var(--green) !important; }
+select { background: #1a1a1a !important; color: var(--text) !important; border-color: rgba(255,255,255,0.1) !important; }
+select option { background: #1c1c1c; color: var(--text); }
+
+/* ── OVERRIDE inline background:white ── */
+[style*="background:white"], [style*="background: white"] {
+  background: var(--card) !important;
+}
+
+/* ── PHOTO RESULT ── */
+#photo-result > div { background: rgba(34,197,94,0.08) !important; border: 1px solid rgba(34,197,94,0.14) !important; }
+#photo-result-name { color: var(--green) !important; }
+#photo-result-desc { color: rgba(134,239,172,0.75) !important; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+</style>
 </head>
 <body>
 
@@ -282,7 +505,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   <div class="auth-card">
     <div class="auth-logo">
       <div class="logo-icon">🥗</div>
-      <h1>Nutri<span>Track</span></h1>
+      <h1>NutriTrack <span class="logo-x">×</span> <span class="logo-jarvis">J.A.R.V.I.S</span></h1>
       <p>Suivi calorique intelligent</p>
     </div>
     <div class="auth-tabs">
@@ -307,7 +530,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 <!-- APP -->
 <div id="app-screen">
   <div class="topbar">
-    <div class="topbar-logo">Nutri<span>Track</span></div>
+    <div class="topbar-logo">NutriTrack <span class="logo-x">×</span> <span class="logo-jarvis">J.A.R.V.I.S</span></div>
     <div class="topbar-right">
       <div class="member-selector" id="member-selector">
         <button class="member-sel-btn" onclick="toggleMemberDropdown()">
@@ -687,6 +910,10 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
+Chart.defaults.color = '#a0a0a0';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+Chart.defaults.font.family = 'Outfit';
+
 const SUPABASE_URL = 'https://httjstswjzedsxrsbsrm.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_9k9UYpPTVDJ4Cniob6v3_A_PEYH6JkH';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
