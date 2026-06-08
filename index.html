@@ -688,12 +688,12 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 const SUPABASE_URL = 'https://httjstswjzedsxrsbsrm.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0dGpzdHN3anplZHN4cnNic3JtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyOTE2NTksImV4cCI6MjA5NDg2NzY1OX0.lIwRyaCh2gDSN8C-ZBsLvdSE8zifumELuwcUxRUKlLw';
+const SUPABASE_KEY = 'sb_publishable_9k9UYpPTVDJ4Cniob6v3_A_PEYH6JkH';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    storageKey: 'nutritrack-v2',
+    storageKey: 'nutritrack-v3',
     storage: window.localStorage,
     detectSessionInUrl: false,
     flowType: 'implicit'
