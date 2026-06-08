@@ -251,6 +251,28 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   .stats-grid { grid-template-columns: 1fr; }
   .extras-row { grid-template-columns: 1fr; }
 }
+
+/* MEMBER SELECTOR */
+.member-selector { position: relative; display: none; align-items: center; }
+.member-sel-btn { display: flex; align-items: center; gap: 6px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 99px; padding: 5px 10px 5px 6px; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; transition: all 0.2s; }
+.member-sel-btn:hover { border-color: var(--green); }
+.member-sel-avatar { font-size: 18px; line-height: 1; }
+.member-dropdown { position: absolute; top: calc(100% + 8px); right: 0; background: white; border: 1.5px solid var(--border); border-radius: 12px; min-width: 190px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); z-index: 200; overflow: hidden; display: none; }
+.member-dropdown.open { display: block; }
+.member-drop-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; font-size: 14px; transition: background 0.15s; }
+.member-drop-item:hover { background: var(--bg); }
+.member-drop-item.selected { background: var(--green-light); }
+
+/* FAMILY SETUP MODAL — centré */
+#family-setup-modal { align-items: center; }
+#family-setup-modal .modal { border-radius: 24px; max-width: 440px; margin: 1rem; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+#family-setup-modal.open .modal { transform: scale(1); }
+
+/* FAMILY TAB */
+.fmc-avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.fmc-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.fmc-row:last-child { border-bottom: none; }
+.invite-code-box { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; letter-spacing: 5px; color: var(--green-dark); background: var(--green-light); padding: 12px 18px; border-radius: 10px; }
 </style>
 </head>
 <body>
@@ -287,6 +309,14 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   <div class="topbar">
     <div class="topbar-logo">Nutri<span>Track</span></div>
     <div class="topbar-right">
+      <div class="member-selector" id="member-selector">
+        <button class="member-sel-btn" onclick="toggleMemberDropdown()">
+          <span class="member-sel-avatar" id="member-sel-avatar">👤</span>
+          <span id="member-sel-name">Moi</span>
+          <span style="font-size:10px;color:var(--muted)">▾</span>
+        </button>
+        <div class="member-dropdown" id="member-dropdown"></div>
+      </div>
       <span class="topbar-user" id="topbar-user"></span>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
     </div>
@@ -297,6 +327,7 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
     <button class="nav-tab" onclick="showTab('stats')">Stats</button>
     <button class="nav-tab" onclick="showTab('weight')">Poids</button>
     <button class="nav-tab" onclick="showTab('goals')">Objectifs</button>
+    <button class="nav-tab" onclick="showTab('famille')">Famille</button>
   </div>
 
   <div class="main-layout">
@@ -447,6 +478,29 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
       </button>
     </div>
 
+    <!-- FAMILLE TAB -->
+    <div class="tab-content" id="tab-famille">
+      <div style="margin-bottom:1.5rem">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">Ma famille</h2>
+        <p style="color:var(--muted);font-size:14px" id="family-name-display"></p>
+      </div>
+      <div id="family-invite-card" style="background:white;border-radius:var(--radius);border:1.5px solid var(--border);padding:1.25rem;margin-bottom:1rem">
+        <h3 style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:12px">Code d'invitation</h3>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div class="invite-code-box" id="invite-code-display">——</div>
+          <button onclick="copyInviteCode()" style="padding:10px 16px;border:1.5px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-size:13px;font-family:Outfit,sans-serif;font-weight:500;transition:all 0.2s" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">Copier</button>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:8px">Partage ce code pour qu'un membre rejoigne ta famille</p>
+      </div>
+      <div style="background:white;border-radius:var(--radius);border:1.5px solid var(--border);padding:1.25rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+          <h3 style="font-size:15px;font-weight:600">Membres</h3>
+          <button onclick="openAddMemberModal()" style="padding:7px 14px;background:linear-gradient(135deg,var(--green),var(--green-dark));color:white;border:none;border-radius:8px;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer">+ Ajouter</button>
+        </div>
+        <div id="family-members-list"><p style="color:var(--muted);font-size:13px">Chargement...</p></div>
+      </div>
+    </div>
+
     <!-- WEIGHT TAB -->
     <div class="tab-content" id="tab-weight">
       <div style="margin-bottom:1.5rem">
@@ -586,6 +640,49 @@ body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--te
   </div>
 </div>
 
+<!-- FAMILY SETUP MODAL -->
+<div class="modal-overlay" id="family-setup-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Bienvenue sur NutriTrack 👨‍👩‍👧</div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:1.5rem">Crée une famille ou rejoins-en une pour commencer.</p>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="fst-tab-create" onclick="switchFamilySetupTab('create')">Créer</button>
+      <button class="modal-tab" id="fst-tab-join" onclick="switchFamilySetupTab('join')">Rejoindre</button>
+    </div>
+    <div id="fst-create">
+      <div class="form-group"><label>Nom de la famille</label><input type="text" id="fst-family-name" placeholder="Ex: Famille Dupont"></div>
+      <div class="form-group"><label>Ton prénom</label><input type="text" id="fst-display-name" placeholder="Ex: Sophie"></div>
+      <div class="form-group"><label>Ton avatar (emoji)</label><input type="text" id="fst-avatar" placeholder="👤" maxlength="2" style="font-size:22px;text-align:center;width:70px"></div>
+      <button class="btn-save" style="width:100%;margin-top:0.5rem" id="fst-create-btn" onclick="createFamily()">Créer ma famille</button>
+    </div>
+    <div id="fst-join" style="display:none">
+      <div class="form-group"><label>Code d'invitation</label><input type="text" id="fst-invite-code" placeholder="Ex: 3F8A1C2B" style="font-family:'Space Mono',monospace;letter-spacing:3px;text-transform:uppercase"></div>
+      <div class="form-group"><label>Ton prénom</label><input type="text" id="fst-join-name" placeholder="Ex: Thomas"></div>
+      <div class="form-group"><label>Ton avatar (emoji)</label><input type="text" id="fst-join-avatar" placeholder="👦" maxlength="2" style="font-size:22px;text-align:center;width:70px"></div>
+      <button class="btn-save" style="width:100%;margin-top:0.5rem" id="fst-join-btn" onclick="joinFamily()">Rejoindre</button>
+    </div>
+    <div id="fst-error" style="display:none;color:#dc2626;font-size:13px;margin-top:0.75rem;padding:8px 12px;background:#fef2f2;border-radius:8px"></div>
+  </div>
+</div>
+
+<!-- ADD MEMBER MODAL -->
+<div class="modal-overlay" id="add-member-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Ajouter un membre</div>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:1rem">Ajoute un membre sans compte (enfant, conjoint...)</p>
+    <div class="form-group"><label>Prénom</label><input type="text" id="am-name" placeholder="Ex: Lucas"></div>
+    <div class="form-group"><label>Avatar (emoji)</label><input type="text" id="am-avatar" placeholder="👦" maxlength="2" style="font-size:22px;text-align:center;width:70px"></div>
+    <div class="form-group"><label>Objectif calorique (kcal/j)</label><input type="number" id="am-calgoal" placeholder="2000" min="500" max="5000"></div>
+    <div id="am-error" style="display:none;color:#dc2626;font-size:13px;padding:8px 12px;background:#fef2f2;border-radius:8px;margin-bottom:0.5rem"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeAddMemberModal()">Annuler</button>
+      <button class="btn-save" onclick="addMemberManually()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -616,6 +713,9 @@ let currentMealTab = 'photo';
 let imageBase64 = null;
 let imageType = null;
 let chartCal = null, chartMacros = null, chartWater = null, chartWeight = null;
+let familyData = null;
+let familyMembers = [];
+let currentMemberId = null;
 
 // AUTH
 async function login() {
@@ -680,6 +780,7 @@ async function initApp(user) {
   if (profile?.height_cm) document.getElementById('height-input').value = profile.height_cm;
   updateGoalsUI();
   loadDay();
+  checkFamilySetup();
 }
 
 sb.auth.onAuthStateChange((event, session) => {
@@ -722,6 +823,7 @@ function showTab(tab) {
   event.target.classList.add('active');
   if (tab === 'stats') loadStats();
   if (tab === 'weight') loadWeightChart();
+  if (tab === 'famille') renderFamilyTab();
 }
 
 // LOAD DATA
@@ -1141,9 +1243,224 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+// ── FAMILY ──────────────────────────────────────────────────
+
+async function checkFamilySetup() {
+  const { data: membership } = await sb
+    .from('family_members')
+    .select('*, families(*)')
+    .eq('user_id', currentUser.id)
+    .maybeSingle();
+
+  if (!membership) {
+    const name = document.getElementById('topbar-user').textContent;
+    document.getElementById('fst-display-name').value = name;
+    document.getElementById('fst-join-name').value = name;
+    document.getElementById('family-setup-modal').classList.add('open');
+    return;
+  }
+  familyData = membership.families;
+  await loadFamily();
+}
+
+function switchFamilySetupTab(tab) {
+  document.getElementById('fst-tab-create').classList.toggle('active', tab === 'create');
+  document.getElementById('fst-tab-join').classList.toggle('active', tab === 'join');
+  document.getElementById('fst-create').style.display = tab === 'create' ? 'block' : 'none';
+  document.getElementById('fst-join').style.display = tab === 'join' ? 'block' : 'none';
+  document.getElementById('fst-error').style.display = 'none';
+}
+
+function showFamilySetupError(msg) {
+  const el = document.getElementById('fst-error');
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+async function createFamily() {
+  const familyName = document.getElementById('fst-family-name').value.trim();
+  const displayName = document.getElementById('fst-display-name').value.trim();
+  const avatar = document.getElementById('fst-avatar').value.trim() || '👤';
+  if (!familyName || !displayName) { showFamilySetupError('Remplis tous les champs'); return; }
+
+  const btn = document.getElementById('fst-create-btn');
+  btn.disabled = true; btn.textContent = 'Création...';
+
+  const { data: family, error: fErr } = await sb
+    .from('families')
+    .insert({ name: familyName, created_by: currentUser.id })
+    .select().single();
+
+  if (fErr) { showFamilySetupError(fErr.message); btn.disabled = false; btn.textContent = 'Créer ma famille'; return; }
+
+  const { error: mErr } = await sb.from('family_members').insert({
+    family_id: family.id,
+    user_id: currentUser.id,
+    role: 'admin',
+    display_name: displayName,
+    avatar_emoji: avatar,
+    calorie_goal: goalCal
+  });
+
+  if (mErr) { showFamilySetupError(mErr.message); btn.disabled = false; btn.textContent = 'Créer ma famille'; return; }
+
+  familyData = family;
+  document.getElementById('family-setup-modal').classList.remove('open');
+  await loadFamily();
+  showToast(`Famille "${familyName}" créée ! 🎉`);
+}
+
+async function joinFamily() {
+  const code = document.getElementById('fst-invite-code').value.trim().toUpperCase();
+  const displayName = document.getElementById('fst-join-name').value.trim();
+  const avatar = document.getElementById('fst-join-avatar').value.trim() || '👤';
+  if (!code || !displayName) { showFamilySetupError('Remplis tous les champs'); return; }
+
+  const btn = document.getElementById('fst-join-btn');
+  btn.disabled = true; btn.textContent = 'Recherche...';
+
+  const { data: family, error } = await sb
+    .from('families').select('*').eq('invite_code', code).maybeSingle();
+
+  if (error || !family) { showFamilySetupError('Code invalide ou famille introuvable'); btn.disabled = false; btn.textContent = 'Rejoindre'; return; }
+
+  const { error: mErr } = await sb.from('family_members').insert({
+    family_id: family.id,
+    user_id: currentUser.id,
+    role: 'member',
+    display_name: displayName,
+    avatar_emoji: avatar,
+    calorie_goal: goalCal
+  });
+
+  if (mErr) { showFamilySetupError(mErr.message); btn.disabled = false; btn.textContent = 'Rejoindre'; return; }
+
+  familyData = family;
+  document.getElementById('family-setup-modal').classList.remove('open');
+  await loadFamily();
+  showToast(`Tu as rejoint la famille "${family.name}" ! 👋`);
+}
+
+async function loadFamily() {
+  if (!familyData) return;
+  const { data: members } = await sb
+    .from('family_members').select('*')
+    .eq('family_id', familyData.id).order('joined_at');
+  familyMembers = members || [];
+  const mine = familyMembers.find(m => m.user_id === currentUser.id);
+  if (mine && !currentMemberId) currentMemberId = mine.id;
+  renderMemberSelector();
+}
+
+function renderMemberSelector() {
+  const realMembers = familyMembers.filter(m => m.user_id);
+  const sel = document.getElementById('member-selector');
+  if (!familyData || realMembers.length <= 1) { sel.style.display = 'none'; return; }
+  sel.style.display = 'flex';
+  updateMemberSelectorDisplay();
+  let html = '';
+  for (const m of realMembers) {
+    const isSelected = m.id === currentMemberId;
+    html += `<div class="member-drop-item ${isSelected ? 'selected' : ''}" onclick="selectMember('${m.id}')">
+      <span style="font-size:18px">${m.avatar_emoji || '👤'}</span>
+      <span style="flex:1">${m.display_name || 'Membre'}${m.user_id === currentUser.id ? ' <span style="font-size:11px;color:var(--muted)">(moi)</span>' : ''}</span>
+      ${isSelected ? '<span style="color:var(--green);font-size:14px">✓</span>' : ''}
+    </div>`;
+  }
+  document.getElementById('member-dropdown').innerHTML = html;
+}
+
+function updateMemberSelectorDisplay() {
+  const m = familyMembers.find(m => m.id === currentMemberId);
+  if (!m) return;
+  document.getElementById('member-sel-avatar').textContent = m.avatar_emoji || '👤';
+  document.getElementById('member-sel-name').textContent = m.display_name || 'Moi';
+}
+
+function toggleMemberDropdown() {
+  document.getElementById('member-dropdown').classList.toggle('open');
+}
+
+function selectMember(id) {
+  currentMemberId = id;
+  updateMemberSelectorDisplay();
+  document.getElementById('member-dropdown').classList.remove('open');
+}
+
+function renderFamilyTab() {
+  if (!familyData) return;
+  document.getElementById('family-name-display').textContent = familyData.name;
+  document.getElementById('invite-code-display').textContent = familyData.invite_code;
+  if (!familyMembers.length) { document.getElementById('family-members-list').innerHTML = '<p style="color:var(--muted);font-size:13px">Aucun membre</p>'; return; }
+  let html = '';
+  for (const m of familyMembers) {
+    const isMe = m.user_id === currentUser.id;
+    const canRemove = !isMe && !m.user_id;
+    html += `<div class="fmc-row">
+      <div class="fmc-avatar">${m.avatar_emoji || '👤'}</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:15px">${m.display_name || 'Membre'}${isMe ? ' <span style="font-size:11px;color:var(--muted);font-weight:400">(moi)</span>' : ''}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">${m.role === 'admin' ? '⭐ Admin' : 'Membre'} · ${m.calorie_goal || 2000} kcal/j${m.user_id ? ' · compte lié' : ' · sans compte'}</div>
+      </div>
+      ${canRemove ? `<button onclick="removeMember('${m.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:4px;border-radius:6px;transition:color 0.2s" onmouseover="this.style.color='#dc2626'" onmouseout="this.style.color='var(--muted)'">✕</button>` : ''}
+    </div>`;
+  }
+  document.getElementById('family-members-list').innerHTML = html;
+}
+
+async function copyInviteCode() {
+  if (!familyData) return;
+  try { await navigator.clipboard.writeText(familyData.invite_code); showToast('Code copié ! 📋'); }
+  catch { showToast('Code : ' + familyData.invite_code); }
+}
+
+function openAddMemberModal() {
+  document.getElementById('am-name').value = '';
+  document.getElementById('am-avatar').value = '';
+  document.getElementById('am-calgoal').value = '2000';
+  document.getElementById('am-error').style.display = 'none';
+  document.getElementById('add-member-modal').classList.add('open');
+}
+function closeAddMemberModal() { document.getElementById('add-member-modal').classList.remove('open'); }
+
+async function addMemberManually() {
+  if (!familyData) return;
+  const name = document.getElementById('am-name').value.trim();
+  const avatar = document.getElementById('am-avatar').value.trim() || '👤';
+  const calGoal = parseInt(document.getElementById('am-calgoal').value) || 2000;
+  if (!name) { const e = document.getElementById('am-error'); e.textContent = 'Entre un prénom'; e.style.display = 'block'; return; }
+
+  const { error } = await sb.from('family_members').insert({
+    family_id: familyData.id,
+    user_id: currentUser.id,
+    role: 'member',
+    display_name: name,
+    avatar_emoji: avatar,
+    calorie_goal: calGoal
+  });
+
+  if (error) { const e = document.getElementById('am-error'); e.textContent = error.message; e.style.display = 'block'; return; }
+  closeAddMemberModal();
+  await loadFamily();
+  renderFamilyTab();
+  showToast(`${name} ajouté à la famille ! 👋`);
+}
+
+async function removeMember(id) {
+  if (!confirm('Retirer ce membre de la famille ?')) return;
+  await sb.from('family_members').delete().eq('id', id);
+  await loadFamily();
+  renderFamilyTab();
+  showToast('Membre retiré');
+}
+
+// ── FIN FAMILY ───────────────────────────────────────────────
+
 // Close modals on overlay click
 document.getElementById('meal-modal').addEventListener('click', e => { if(e.target === document.getElementById('meal-modal')) closeMealModal(); });
 document.getElementById('activity-modal').addEventListener('click', e => { if(e.target === document.getElementById('activity-modal')) closeActivityModal(); });
+document.getElementById('add-member-modal').addEventListener('click', e => { if(e.target === document.getElementById('add-member-modal')) closeAddMemberModal(); });
+document.addEventListener('click', e => { if (!e.target.closest('#member-selector')) document.getElementById('member-dropdown').classList.remove('open'); });
 </script>
 </body>
 </html>
